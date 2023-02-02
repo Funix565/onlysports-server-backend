@@ -157,7 +157,7 @@ export const posts = [
     },
     {
         _id: new mongoose.Types.ObjectId(),
-        userId: userIds[3],
+        userId: userIds[5],
         fullName: "Veronika Billiams",
         location: "Florida, U. S.",
         description:
@@ -179,7 +179,7 @@ export const posts = [
     },
     {
         _id: new mongoose.Types.ObjectId(),
-        userId: userIds[4],
+        userId: userIds[7],
         fullName: "Kate Nichou",
         location: "Beaumont, Texas",
         description:
@@ -202,7 +202,7 @@ export const posts = [
     },
     {
         _id: new mongoose.Types.ObjectId(),
-        userId: userIds[5],
+        userId: userIds[6],
         fullName: "Pavlo Burmi",
         location: "Turku, Finland",
         description:
@@ -225,7 +225,7 @@ export const posts = [
     },
     {
         _id: new mongoose.Types.ObjectId(),
-        userId: userIds[6],
+        userId: userIds[4],
         fullName: "Gustav Triplantis",
         location: "Lafayette, U. S.",
         description:
@@ -248,7 +248,7 @@ export const posts = [
     },
     {
         _id: new mongoose.Types.ObjectId(),
-        userId: userIds[7],
+        userId: userIds[2],
         fullName: "Vladrea Shark",
         location: "Detroit, Michigan",
         description:
