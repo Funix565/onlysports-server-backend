@@ -19,7 +19,7 @@ export const createPost = async (req, res) => {
         await newPost.save();
 
         // Get all the posts with a new one
-        const post = await Post.find();
+        const post = await Post.find().sort({createdAt: 'desc'});
 
         // 201 -- Created
         res.status(201).json(post);
@@ -32,7 +32,7 @@ export const createPost = async (req, res) => {
 /* READ */
 export const getFeedPosts = async (req, res) => {
     try {
-        const post = await Post.find();
+        const post = await Post.find().sort({createdAt: 'desc'});
 
         // 200 -- OK
         res.status(200).json(post);
@@ -45,7 +45,7 @@ export const getFeedPosts = async (req, res) => {
 export const getUserPosts = async (req, res) => {
     try {
         const { userId } = req.params;
-        const post = await Post.find({ userId });
+        const post = await Post.find({ userId }).sort({createdAt: 'desc'});
 
         // 200 -- OK
         res.status(200).json(post);
