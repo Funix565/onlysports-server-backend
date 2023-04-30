@@ -34,6 +34,7 @@ app.use(morgan("common"));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
+// Create a virtual path prefix, use absolute path of the directory that we want to serve. https://expressjs.com/en/starter/static-files.html
 app.use("/assets", express.static(path.join(__dirname, 'public/assets')))
 
 /* FILE STORAGE */
@@ -49,6 +50,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 /* ROUTES WITH FILES*/
+// Use multer anyway. Later we can access saved files and upload them
 app.post("/auth/register", upload.single("picture"), register);
 app.post("/posts", verifyToken, upload.single("picture"), createPost);
 
