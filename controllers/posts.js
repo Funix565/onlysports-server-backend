@@ -1,18 +1,27 @@
 import Post from "../models/Post.js";
 import User from "../models/User.js";
+import {uploadToImgbb} from "../middleware/uploader.js";
 
 /* CREATE */
 export const createPost = async (req, res) => {
     try {
         const {userId, description, picturePath } = req.body;
         const user = await User.findById(userId);
+
+        // Here we can upload image to IMGBB and use returned link later
+        // I don't think that it is a bad approach. Uploading is isolated in a separate function.
+        // We just use its functionality as User.findById, that's all
+
+        const picturePathUrl = await uploadToImgbb(picturePath);
+        // const picturePathUrl = await uploadToBucket(picturePath);
+
         const newPost = new Post({
             userId,
             fullName: user.fullName,
             location: user.location,
             description,
             userPicturePath: user.picturePath,
-            picturePath,
+            picturePath: picturePathUrl,
             likes: {},
             comments: []
         })
