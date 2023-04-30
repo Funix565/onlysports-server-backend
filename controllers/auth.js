@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import {uploadToImgbb} from "../middleware/uploader.js";
 
 /* REGISTER USER */
 export const register = async (req, res) => {
@@ -18,11 +19,18 @@ export const register = async (req, res) => {
         const salt = await bcrypt.genSalt();
         const passwordHash = await bcrypt.hash(password, salt);
 
+        // Here we can upload image to IMGBB and use returned link later
+        // I don't think that it is a bad approach. Uploading is isolated in a separate function.
+        // We just use its functionality as bcrypt, that's all
+
+        const picturePathUrl = await uploadToImgbb(picturePath);
+        // const picturePathUrl = await uploadToBucket(picturePath);
+
         const newUser = new User({
             fullName,
             email,
             password: passwordHash,
-            picturePath,
+            picturePath: picturePathUrl,
             friends,
             location,
             occupation,
