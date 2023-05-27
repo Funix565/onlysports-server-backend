@@ -37,13 +37,15 @@ export const getUserFriends = async (req, res) => {
 export const addRemoveFriend = async (req, res) => {
     try {
         const { id, friendId } = req.params;
+
         const user = await User.findById(id);
         const friend = await User.findById(friendId);
         
         if (user.friends.includes(friendId)) {
             // Remove friends from both users
             user.friends = user.friends.filter((id) => id !== friendId);
-            friend.friends = friend.friends.filter((id) => id !== id);
+            // !REALLY IMPORTANT FIX HERE: was \(id) => id !== id\ -- shadow var scope, unexpected behaviour with friends
+            friend.friends = friend.friends.filter((friendId) => friendId !== id);
         } else {
             // Add them to the friendlist
             user.friends.push(friendId);
