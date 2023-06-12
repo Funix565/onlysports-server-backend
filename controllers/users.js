@@ -5,11 +5,13 @@ export const getUser = async (req, res) => {
     try {
         const { id } = req.params;
         const user = await User.findById(id);
+        // 200 -- OK
         res.status(200).json(user);
     } catch (err) {
+        // 404 -- Not Found
         res.status(404).json({ message: err.message });
     }
-}
+};
 
 export const getUserFriends = async (req, res) => {
     try {
@@ -26,17 +28,24 @@ export const getUserFriends = async (req, res) => {
             }
         );
 
+        // 200 -- OK
         res.status(200).json(formattedFriends);
     } catch (err) {
+        // 404 -- Not Found
         res.status(404).json({ message: err.message });
     }
 };
 
 /* UPDATE */
-// TODO: Users can add themselves to the friend list. Crash
 export const addRemoveFriend = async (req, res) => {
     try {
         const { id, friendId } = req.params;
+
+        // Users can't add themselves to the friend list.
+        if (id === friendId) {
+            // 400 -- Bad Request
+            return res.status(400).send("Users can't add themselves to the friend list. ");
+        }
 
         const user = await User.findById(id);
         const friend = await User.findById(friendId);
@@ -65,8 +74,10 @@ export const addRemoveFriend = async (req, res) => {
             }
         );
 
+        // 200 -- OK
         res.status(200).json(formattedFriends);
     } catch (err) {
+        // 404 -- Not Found
         res.status(404).json({ message: err.message });
     }
-}
+};
