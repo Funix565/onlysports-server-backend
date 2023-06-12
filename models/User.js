@@ -4,18 +4,18 @@ const UserSchema = new mongoose.Schema({
     fullName: {
         type: String,
         required: true,
-        min: 2
+        minLength: 2
     },
     email: {
         type: String,
         required: true,
-        max: 255,
+        maxLength: 255,
         unique: true
     },
     password: {
         type: String,
         required: true,
-        min: 5
+        minLength: 5
     },
     picturePath: {
         type: String,
@@ -24,6 +24,10 @@ const UserSchema = new mongoose.Schema({
     friends: {
         type: Array,
         default: []
+    },
+    trainerId: {
+        type: String,
+        default: ""
     },
     location: String,
     occupation: String,
