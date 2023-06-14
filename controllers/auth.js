@@ -98,12 +98,17 @@ export const login = async (req, res) => {
         // 400 -- Bad Request
         if (!isMatch) return res.status(400).json({ msg: "Invalid credentials. " });
 
-        // TODO: Add USER role to payload
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+        // TODO: Add USER role to payload and response
+        const token = jwt.sign(
+            {
+                id: user._id,
+                role: Roles.User
+            },
+            process.env.JWT_SECRET);
         // Delete the password, so it doesn't get sent back to the front end
         delete user.password;
         // 200 -- OK
-        res.status(200).json({ token, user });
+        res.status(200).json({ token, user, role: Roles.User, isMember: user.trainerId });
     } catch (err) {
         // 500 -- Internal Server Error
         res.status(500).json({ error: err.message });
@@ -131,7 +136,7 @@ export const loginTrainer = async (req, res) => {
         );
         delete trainer.password;
         // 200 -- OK
-        res.status(200).json({ token, trainer });
+        res.status(200).json({ token, user: trainer, role: Roles.Trainer, isMember: trainer._id });
     } catch (err) {
         // 500 -- Internal Server Error
         res.status(500).json({ error: err.message });
