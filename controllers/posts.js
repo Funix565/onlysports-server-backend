@@ -7,9 +7,9 @@ import Trainer from "../models/Trainer.js";
 /* CREATE */
 export const createPost = async (req, res) => {
     try {
-        // TODO: Check create private post
-        //  Ideally, only trainer role can create private post, so maybe add checks here.
-        const {userId, description, picturePath, isPrivate} = req.body;
+        const {userId, description, picturePath, isPrivate: isPrivateStr} = req.body;
+        const isPrivate = JSON.parse(isPrivateStr);
+
         const {role} = req.user;
 
         // Only trainer can create private post
@@ -27,7 +27,8 @@ export const createPost = async (req, res) => {
         // I don't think that it is a bad approach. Uploading is isolated in a separate function.
         // We just use its functionality as User.findById, that's all
 
-        const picturePathUrl = await uploadToImgbb(picturePath);
+        // Handle case when Post without image
+        const picturePathUrl = picturePath ? await uploadToImgbb(picturePath) : "";
         // const picturePathUrl = await uploadToBucket(picturePath);
 
         const newPost = new Post({
@@ -43,14 +44,15 @@ export const createPost = async (req, res) => {
         })
         await newPost.save();
 
-        // TODO: Test new feature with private and public posts
         // Get all the posts with a new one. Check isPrivate
         if (isPrivate === false) {
+            // Grab all public posts when new created -- means in feed
             const post = await Post.find({isPrivate: 'false'}).sort({createdAt: 'desc'});
             // 201 -- Created
             res.status(201).json(post);
         } else if (isPrivate === true) {
-            const post = await Post.find({isPrivate: 'true'}).sort({createdAt: 'desc'});
+            // Grab only poster-trainer private posts -- means in team
+            const post = await Post.find({userId: userId, isPrivate: 'true'}).sort({createdAt: 'desc'});
             // 201 -- Created
             res.status(201).json(post);
         }
@@ -102,13 +104,9 @@ export const getTeamPosts = async (req, res) => {
 /* UPDATE */
 export const likePost = async (req, res) => {
     try {
-        // TODO: Maybe here check for isPrivate and new logic?
-        //  Only author-trainer can like post. Grab id and compare with post author id
-        //  And only team member can like post. Grab user id, grab post trainer id, check membership
-        //  Perhaps, extract checks in middleware. But is it ok for middleware to Access url params?
-
+        // TODO: Perhaps, extract checks in middleware. But is it ok for middleware to Access url params?
         const {role, id: payloadId} = req.user;
-        const {paramPostId} = req.params;
+        const {id: paramPostId} = req.params;
         const {userId} = req.body;
 
         if (payloadId !== userId) {
@@ -129,7 +127,8 @@ export const likePost = async (req, res) => {
                     return res.status(403).send("Access Denied");
                 }
             } else if (role === Roles.User) {
-                const user = User.findById(userId);
+                const user = await User.findById(userId);
+
                 // Only user who is member of this trainer can like it
                 if (user.trainerId !== post.userId) {
                     // 403 -- Forbidden
