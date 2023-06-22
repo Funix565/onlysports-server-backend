@@ -16,7 +16,7 @@ export const getTrainer = async (req, res) => {
 
 export const getTeamMembers = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { trainerId: id } = req.params;
         const trainer = await Trainer.findById(id);
 
         const members = await Promise.all(
@@ -92,9 +92,6 @@ export const addRemoveMember = async (req, res) => {
 };
 
 export const updateCalendarIframe = async (req, res) => {
-
-    console.log("updateCalendarIframe");
-
     try {
         const { id } = req.params;
         const { calendarIframe } = req.body;

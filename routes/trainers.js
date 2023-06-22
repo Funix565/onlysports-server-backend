@@ -1,5 +1,4 @@
 import express from "express";
-// import controllers
 import { checkMembership, checkTrainerRole, verifyToken } from "../middleware/auth.js";
 import {
     addRemoveMember,
@@ -7,13 +6,13 @@ import {
     getTrainer,
     updateCalendarIframe,
     updateWallet
-} from "../controllers/trainers.js";
+} from "controllers/trainers.js";
 
 const router = express.Router();
 
 /* READ */
 router.get("/:id", verifyToken, getTrainer);
-router.get("/:id/members", verifyToken, checkMembership, getTeamMembers);
+router.get("/:trainerId/members", verifyToken, checkMembership, getTeamMembers);
 
 /* UPDATE */
 router.patch("/:id/members/:memberId", verifyToken, checkTrainerRole, addRemoveMember);
