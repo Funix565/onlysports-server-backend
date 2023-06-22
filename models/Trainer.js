@@ -30,8 +30,6 @@ const TrainerSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        // TODO: Need this field for Post model
-        //  Check this field in all Trainer feature
         location: String,
         careerStart: {
             type: Date,

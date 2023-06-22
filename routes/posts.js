@@ -14,7 +14,6 @@ router.get("/:trainerId/teamPosts", verifyToken, checkMembership, getTeamPosts);
 
 /* UPDATE */
 // TODO: Think about protecting private post.
-//  Ideally, only trainer and members can like them.
 //  But this requires additional logic and checks. Can't be implemented in middleware, I guess
 router.patch("/:id/like", verifyToken, likePost);
 
