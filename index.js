@@ -11,12 +11,14 @@ import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
 import postRoutes from "./routes/posts.js"
-import { register } from "./controllers/auth.js"
+import trainerRoutes from "./routes/trainers.js"
+import { register, registerTrainer } from "./controllers/auth.js"
 import { createPost } from "./controllers/posts.js";
 import { verifyToken } from "./middleware/auth.js";
 import User from "./models/User.js"
 import Post from "./models/Post.js";
-import { users, posts } from "./data/index.js";
+import Trainer from "./models/Trainer.js";
+import { users, posts, trainers } from "./data/index.js";
 
 /* 
     CONFIGURATIONS
@@ -52,6 +54,7 @@ const upload = multer({ storage });
 /* ROUTES WITH FILES*/
 // Use multer anyway. Later we can access saved files and upload them
 app.post("/auth/register", upload.single("picture"), register);
+app.post("/auth/registerTrainer", upload.single("picture"), registerTrainer);
 app.post("/posts", verifyToken, upload.single("picture"), createPost);
 
 /* ROUTES */
@@ -61,6 +64,8 @@ app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 // "/posts" is a prefix
 app.use("/posts", postRoutes);
+// "/trainers" is a prefix
+app.use("/trainers", trainerRoutes);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
@@ -73,4 +78,5 @@ mongoose.connect(process.env.MONGO_URL, {
     /* ADD DATA ONE TIME */
     // User.insertMany(users);
     // Post.insertMany(posts);
+    // Trainer.insertMany(trainers);
 }).catch((error) => console.log(`${error} did not connect`));

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const postSchema = mongoose.Schema(
+const postSchema = new mongoose.Schema(
     {
         userId: {
             type: String,
@@ -11,7 +11,11 @@ const postSchema = mongoose.Schema(
             required: true
         },
         location: String,
-        description: String,
+        description: {
+            type: String,
+            minLength: 1,
+            maxLength: 2000
+        },
         picturePath: String,
         userPicturePath: String,
         likes: {
@@ -21,6 +25,10 @@ const postSchema = mongoose.Schema(
         comments: {
             type: Array,
             default: []
+        },
+        isPrivate: {
+            type: Boolean,
+            default: "false"
         }
     },
     { timestamps: true }
