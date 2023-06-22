@@ -58,6 +58,7 @@ export const registerTrainer = async (req, res) => {
             picturePath,
             members,
             headline,
+            location,
             careerStart
         } = req.body;
 
@@ -73,6 +74,7 @@ export const registerTrainer = async (req, res) => {
             picturePath: picturePathUrl,
             members,
             headline,
+            location,
             careerStart
         });
         const savedTrainer = await newTrainer.save();
@@ -98,7 +100,6 @@ export const login = async (req, res) => {
         // 400 -- Bad Request
         if (!isMatch) return res.status(400).json({ msg: "Invalid credentials. " });
 
-        // TODO: Add USER role to payload and response
         const token = jwt.sign(
             {
                 id: user._id,
