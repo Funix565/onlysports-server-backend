@@ -30,7 +30,7 @@ export const checkMembership = async (req, res, next) => {
     try {
         // req.user set in verifyToken
         const { role, id: payloadId } = req.user;
-        const { id: paramId } = req.params;
+        const { trainerId: paramId } = req.params;
 
         // If role===trainer, grab _id from payload and compare with route :id.
         if (role === Roles.Trainer) {
@@ -59,15 +59,10 @@ export const checkMembership = async (req, res, next) => {
 // Anyway, checkMembership is for one use case: team access, for trainer and user.
 // checkTrainerRole is for trainers only: only logged in trainers can add members to their teams and update calendars
 export const checkTrainerRole = async (req, res, next) => {
-
-    console.log("checkTrainerRole");
-
     try {
         // Check jwt payload.
         const { role, id: payloadId } = req.user;
         const { id: paramId } = req.params;
-
-        console.log(paramId);
 
         // Only trainer can add/remove members.
         if (role !== Roles.Trainer) {
@@ -80,8 +75,6 @@ export const checkTrainerRole = async (req, res, next) => {
             // 403 -- Forbidden
             return res.status(403).send("Access Denied");
         }
-
-        console.log("before next, ok?")
         next();
     } catch (err) {
         // 500 -- Internal Server Error
