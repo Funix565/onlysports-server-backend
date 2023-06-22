@@ -6,7 +6,7 @@ import {
     getTrainer,
     updateCalendarIframe,
     updateWallet
-} from "controllers/trainers.js";
+} from "../controllers/trainers.js";
 
 const router = express.Router();
 
